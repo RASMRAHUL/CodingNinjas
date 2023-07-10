@@ -1,4 +1,4 @@
-5.   Detect Cycle In A Directed Graph ...............
+5.   Detect Cycle In A Directed Graph ...............(using DFS)
 
 
 #include<unordered_map>
