@@ -1,9 +1,7 @@
-6.  Topological Sort............(using DFS)
+6.  Topological Sort............(using DFS).....................
 
 
 #include <bits/stdc++.h> 
-
-
 
 void topoSort(int node,vector<bool>& visited ,stack<int> &s,unordered_map<int, list<int> > &adj)
 {
@@ -49,3 +47,69 @@ vector<int> topologicalSort(vector<vector<int>> &edges, int v, int e)  {
 
     return ans;
 }
+
+//*******************************************************************************************************************************************
+APPROACH 2 ..
+
+
+//Topological Sort............(using BFS).....................(Kahn's Algorithm).................
+
+#include <bits/stdc++.h> 
+vector<int> topologicalSort(vector<vector<int>> &edges, int v, int e)  {
+   // create adjacency matrix...
+    unordered_map<int, list<int>> adj;
+   
+   for(int i = 0 ;i< e; i++)
+   {
+       int u = edges[i][0];
+       int v = edges[i][1];
+
+      adj[u].push_back(v); 
+   }
+
+   // find all indegree..
+   vector<int> indegree(v);
+   for(auto i : adj)
+   {
+       for(auto j : i.second)
+       {
+           indegree[j]++;
+       }
+   }
+
+
+   // 0 indegree walo ko push kar do queue me
+   queue<int> q;
+   for(int i =0 ;i< v; i++)
+   {
+       if(indegree[i] == 0)
+            q.push(i);
+   }
+
+    // do BFS
+    vector<int> ans;
+    while(!q.empty())
+    {
+        int front = q.front();
+        q.pop();
+        
+        // ans store
+        ans.push_back(front);
+
+        // neighbour indegree ko update karo
+        for(auto neighbour : adj[front])
+        {
+            indegree[neighbour]--;
+            if(indegree[neighbour] == 0)
+                q.push(neighbour);
+        }
+    }
+
+
+    return ans;
+    
+
+   
+}
+
+
