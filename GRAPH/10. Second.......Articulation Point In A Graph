@@ -1,0 +1,81 @@
+10. Second.......Articulation Point In A Graph
+
+
+#include<list>
+#include<unordered_map>
+#include<vector>
+
+void dfs(int node, int parent, int &timer,vector<int>& disc,vector<int>& low,
+ unordered_map<int, bool>& visited, unordered_map<int, list<int>>& adj,
+ vector<vector<int>> &result )
+ {
+
+     visited[node] = true;
+     disc[node] = low[node] = timer++;
+    int child = 0;
+
+     for(auto nbr : adj[node])
+     {
+         if(nbr == parent)
+                continue;
+            
+        if(!visited[nbr])
+        {
+             
+            dfs(nbr, node,timer, disc, low, visited, adj, result);
+
+            // update low 
+            low[node] = min(low[node], low[nbr]);
+            
+            // check edge is brige or not...
+            if(low[nbr] >= disc[node]  && parent != -1){
+              result[node] = 1;
+            }
+
+            child++;
+
+        }
+        else
+        {
+            // node already visited and not parent
+            // back edge
+            low[node]  = min(low[node], disc[nbr]);
+        }
+     }
+    if(parent == -1 && child> 1)
+        result[node] = 1;
+
+
+ }
+void findBridges(vector<vector<int>> &edges, int v, int e) {
+    // adjacency list creation
+       unordered_map<int, list<int>> adj;
+       for(int i = 0 ;i< edges.size(); i++)
+       {
+           int u = edges[i][0];
+           int v = edges[i][1];
+
+           adj[u].push_back(v);
+           adj[v].push_back(u);
+       }
+        int timer = 0;
+       vector<int> disc(v, -1);
+       vector<int> low(v, -1);
+       int parent = -1;
+       unordered_map<int, bool> visited(v);
+
+       vector<int> result(v, 0);
+       for(int i =0 ;i< v ; i++)
+       {
+           if(!visited[i])
+           {
+               dfs(i, parent,timer, disc, low, visited, adj, result);
+           }
+       }
+
+    for(int i = 0 ;i< v ;i++)
+    {
+        cout<<result[i]<<" ";
+    }  
+
+}
